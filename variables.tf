@@ -1,21 +1,21 @@
 variable "tfc_org_name" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "gcp_org_id" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "tfc_hostname" {
-  type        = string
-  default     = "app.terraform.io"
+  type    = string
+  default = "app.terraform.io"
 }
 
 variable "gcp_wi_project" {
   type        = string
-  default = ""
+  default     = ""
   description = "Project for workload identity"
 }
 
@@ -26,31 +26,31 @@ variable "tfc_project_name" {
 }
 
 variable "tfc_service_account" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "tfc_wi_pool" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "tfc_workspace_name" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "workload_identity_pool_provider_id" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "github_repository" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "token" {
-  type = string
+  type    = string
   default = ""
 }
