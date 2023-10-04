@@ -36,12 +36,20 @@ resource "google_iam_workload_identity_pool_provider" "tfc_provider" {
     # allowed_audiences = [var.tfc_gcp_audience]
   }
   attribute_condition = "assertion.sub.startsWith(\"organization:${var.tfc_org_name}:project:${var.tfc_project_name}:workspace:${var.tfc_workspace_name}\")"
+
+  depends_on = [
+    google_iam_workload_identity_pool.tfc_pool
+  ]
 }
 
 resource "google_service_account" "tfc_service_account" {
   account_id   = var.tfc_service_account
   display_name = "Terraform Cloud Service Account"
   project      = google_project.wi_project.id
+
+  depends_on = [
+    google_project.wi_project
+  ]
 }
 
 resource "google_service_account_iam_member" "tfc_service_account_member" {

@@ -24,7 +24,6 @@ variable "tfc_service_account" {
 
 variable "gcp_org_id" {
   type    = string
-  default = "519726315968"
 }
 
 variable "tfc_wi_pool" {
@@ -58,4 +57,9 @@ variable "github_repository" {
 
 variable "token" {
   type = string
+}
+
+variable "branch" {
+  type    = string
+  default = "main"
 }

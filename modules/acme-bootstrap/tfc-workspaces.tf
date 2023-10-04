@@ -14,12 +14,6 @@ resource "github_repository" "github_repository" {
   description = ""
 
   visibility = "public"
-
-  template {
-    owner                = "nlosg"
-    repository           = "terraform-template-module"
-    include_all_branches = true
-  }
 }
 
 resource "tfe_project" "tfc_project" {
@@ -35,8 +29,13 @@ resource "tfe_workspace" "tfc_workspace" {
   vcs_repo {
     identifier     = var.github_repository
     oauth_token_id = tfe_oauth_client.gh_auth.oauth_token_id
-    branch         = "main"
+    branch         = var.branch
   }
+
+  depends_on = [
+    tfe_project.tfc_project,
+    tfe_oauth_client.gh_auth
+  ]
 }
 
 resource "tfe_variable" "enable_gcp_provider_auth" {

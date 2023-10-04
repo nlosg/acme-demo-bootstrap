@@ -3,6 +3,9 @@ resource "google_project_service" "services" {
   service  = each.value
   project  = var.gcp_wi_project
   
+  depends_on = [
+    google_project.wi_project
+  ]
 }
 
 
