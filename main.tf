@@ -1,6 +1,8 @@
 resource "google_project_service" "services" {
-  count   = length(var.gcp_service_list)
-  service = var.gcp_service_list[count.index]
+  for_each = toset(var.gcp_service_list)
+  service  = each.value
+  project  = var.gcp_wi_project
+  
 }
 
 

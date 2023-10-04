@@ -1,10 +1,18 @@
-resource "google_iam_workload_identity_pool" "tfc_prd_pool" {
-  workload_identity_pool_id = "acme-prd-pool"
+resource "google_project" "wi_project" {
+  name       = var.gcp_wi_project
+  project_id = var.gcp_wi_project
+  org_id     = var.gcp_org_id
 }
 
-resource "google_iam_workload_identity_pool_provider" "tfc_prd_provider" {
-  workload_identity_pool_id          = google_iam_workload_identity_pool.tfc_prd_pool.workload_identity_pool_id
-  workload_identity_pool_provider_id = "acme-prd-pool-provider"
+resource "google_iam_workload_identity_pool" "tfc_pool" {
+  workload_identity_pool_id = var.tfc_wi_pool
+  project                   = google_project.wi_project.id
+}
+
+resource "google_iam_workload_identity_pool_provider" "tfc_provider" {
+  workload_identity_pool_id          = google_iam_workload_identity_pool.tfc_pool.workload_identity_pool_id
+  workload_identity_pool_provider_id = var.workload_identity_pool_provider_id
+  project                            = google_project.wi_project.id
   attribute_mapping = {
     "google.subject"                        = "assertion.sub",
     "attribute.aud"                         = "assertion.aud",
@@ -27,22 +35,23 @@ resource "google_iam_workload_identity_pool_provider" "tfc_prd_provider" {
     # Uncomment the line below if you are specifying a custom value for the audience instead of using the default audience.
     # allowed_audiences = [var.tfc_gcp_audience]
   }
-  attribute_condition = "assertion.sub.startsWith(\"organization:${var.tfc_org_name}:project:${var.tfc_project_name}:workspace:${var.tfc_prd_workspace_name}\")"
+  attribute_condition = "assertion.sub.startsWith(\"organization:${var.tfc_org_name}:project:${var.tfc_project_name}:workspace:${var.tfc_workspace_name}\")"
 }
 
-resource "google_service_account" "prd_tfc_service_account" {
-  account_id   = "tfc-sa-acme-prd"
+resource "google_service_account" "tfc_service_account" {
+  account_id   = var.tfc_service_account
   display_name = "Terraform Cloud Service Account"
+  project      = google_project.wi_project.id
 }
 
-resource "google_service_account_iam_member" "prd_tfc_service_account_member" {
-  service_account_id = google_service_account.prd_tfc_service_account.name
+resource "google_service_account_iam_member" "tfc_service_account_member" {
+  service_account_id = google_service_account.tfc_service_account.name
   role               = "roles/iam.workloadIdentityUser"
-  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.tfc_prd_pool.name}/*"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.tfc_pool.name}/*"
 }
 
-resource "google_project_iam_member" "prd_tfc_project_member" {
-  project = var.gcp_project_id
+resource "google_project_iam_member" "tfc_project_member" {
+  project = google_project.wi_project.id
   role    = "roles/editor"
-  member  = "serviceAccount:${google_service_account.prd_tfc_service_account.email}"
+  member  = "serviceAccount:${google_service_account.tfc_service_account.email}"
 }

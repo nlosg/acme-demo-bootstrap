@@ -5,22 +5,34 @@ variable "tfc_hostname" {
 
 variable "tfc_org_name" {
   type        = string
+  default     = "nlosg-utokan"
   description = "The name of your Terraform Cloud organization"
 }
 
 variable "tfc_project_name" {
   type        = string
-  default     = "acme-infra"
   description = "The project under which a workspace will be created"
 }
 
-variable "tfc_prd_workspace_name" {
+variable "tfc_workspace_name" {
   type        = string
-  default     = "acme-infra-prod"
 }
 
-variable "gcp_project_id" {
-  type        = string
+variable "tfc_service_account" {
+  type = string
+}
+
+variable "gcp_org_id" {
+  type    = string
+  default = "519726315968"
+}
+
+variable "tfc_wi_pool" {
+  type = string
+}
+
+variable "workload_identity_pool_provider_id" {
+  type = string
 }
 
 variable "gcp_service_list" {
@@ -32,4 +44,18 @@ variable "gcp_service_list" {
     "sts.googleapis.com",
     "iamcredentials.googleapis.com"
   ]
+}
+
+variable "gcp_wi_project" {
+  type        = string
+  description = "Project for workload identity"
+}
+
+
+variable "github_repository" {
+  type = string
+}
+
+variable "token" {
+  type = string
 }
