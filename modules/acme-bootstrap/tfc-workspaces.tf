@@ -1,19 +1,30 @@
 # Connecting TF workspace with Github
 
 resource "tfe_oauth_client" "gh_auth" {
-  name             = "github-oauth-client"
+  name             = var.gh_oauth_client_name
   organization     = var.tfc_org_name
-  api_url          = "https://api.github.com"
-  http_url         = "https://github.com"
+  api_url          = var.api_url
+  http_url         = var.http_url
   oauth_token      = var.token
-  service_provider = "github"
+  service_provider = var.service_provider
 }
 
 resource "github_repository" "github_repository" {
   name        = var.github_repository
   description = ""
+  auto_init = true
 
   visibility = "public"
+}
+
+resource "github_branch" "main" {
+  repository = github_repository.github_repository.name
+  branch     = var.branch
+}
+
+resource "github_branch_default" "default"{
+  repository = github_repository.github_repository.name
+  branch     = github_branch.main.branch
 }
 
 resource "tfe_project" "tfc_project" {
@@ -27,7 +38,7 @@ resource "tfe_workspace" "tfc_workspace" {
   project_id   = tfe_project.tfc_project.id
 
   vcs_repo {
-    identifier     = var.github_repository
+    identifier     = github_repository.github_repository.full_name
     oauth_token_id = tfe_oauth_client.gh_auth.oauth_token_id
     branch         = var.branch
   }

@@ -5,14 +5,17 @@ resource "google_project" "wi_project" {
 }
 
 resource "google_iam_workload_identity_pool" "tfc_pool" {
+  provider                  = google-beta
   workload_identity_pool_id = var.tfc_wi_pool
-  project                   = google_project.wi_project.id
+  project                   = var.gcp_wi_project
+
 }
 
 resource "google_iam_workload_identity_pool_provider" "tfc_provider" {
+  provider                           = google-beta
+  project                            = var.gcp_wi_project
   workload_identity_pool_id          = google_iam_workload_identity_pool.tfc_pool.workload_identity_pool_id
   workload_identity_pool_provider_id = var.workload_identity_pool_provider_id
-  project                            = google_project.wi_project.id
   attribute_mapping = {
     "google.subject"                        = "assertion.sub",
     "attribute.aud"                         = "assertion.aud",
@@ -45,7 +48,7 @@ resource "google_iam_workload_identity_pool_provider" "tfc_provider" {
 resource "google_service_account" "tfc_service_account" {
   account_id   = var.tfc_service_account
   display_name = "Terraform Cloud Service Account"
-  project      = google_project.wi_project.id
+  project      = var.gcp_wi_project
 
   depends_on = [
     google_project.wi_project

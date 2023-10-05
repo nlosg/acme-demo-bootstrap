@@ -54,3 +54,23 @@ variable "token" {
   type    = string
   default = ""
 }
+
+variable "api_url" {
+  type    = string
+  default = "https://api.github.com"
+}
+
+variable "http_url" {
+  type    = string
+  default = "https://github.com"
+}
+
+variable "service_provider" {
+  type    = string
+  default = "github"
+}
+
+variable "gh_oauth_client_name" {
+  type    = string
+  default = ""
+}

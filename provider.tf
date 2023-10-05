@@ -15,6 +15,10 @@ provider "google" {
   region = "global"
 }
 
+provider "google-beta" {
+  region = "global"
+}
+
 provider "github" {
   token = var.token
 }
