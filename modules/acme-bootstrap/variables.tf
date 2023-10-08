@@ -1,6 +1,6 @@
 variable "tfc_hostname" {
-  type        = string
-  default     = "app.terraform.io"
+  type    = string
+  default = "app.terraform.io"
 }
 
 variable "tfc_org_name" {
@@ -15,7 +15,7 @@ variable "tfc_project_name" {
 }
 
 variable "tfc_workspace_name" {
-  type        = string
+  type = string
 }
 
 variable "tfc_service_account" {
@@ -23,7 +23,7 @@ variable "tfc_service_account" {
 }
 
 variable "gcp_org_id" {
-  type    = string
+  type = string
 }
 
 variable "tfc_wi_pool" {
@@ -65,17 +65,17 @@ variable "branch" {
 }
 
 variable "api_url" {
-  type = string
+  type    = string
   default = "https://api.github.com"
 }
 
 variable "http_url" {
-  type = string
+  type    = string
   default = "https://github.com"
 }
 
 variable "service_provider" {
-  type = string
+  type    = string
   default = "github"
 }
 

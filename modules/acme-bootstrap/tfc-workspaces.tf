@@ -12,7 +12,7 @@ resource "tfe_oauth_client" "gh_auth" {
 resource "github_repository" "github_repository" {
   name        = var.github_repository
   description = ""
-  auto_init = true
+  auto_init   = true
 
   visibility = "public"
 }
@@ -22,7 +22,7 @@ resource "github_branch" "main" {
   branch     = var.branch
 }
 
-resource "github_branch_default" "default"{
+resource "github_branch_default" "default" {
   repository = github_repository.github_repository.name
   branch     = github_branch.main.branch
 }
